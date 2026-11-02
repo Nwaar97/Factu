@@ -1,0 +1,172 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Plume — facturation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eceffa;--card:#fff;--ink:#14172b;--mut:#6b7090;--line:#dde1f0;--ac:#4b3bff;--acs:#e3e0ff;--ok:#0f9d78;--wait:#d9780a;--bad:#e5484d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1020;--card:#171a30;--ink:#eceefb;--mut:#9399b9;--line:#2a2e4b;--ac:#8b80ff;--acs:#2a2668}}
+:root[data-theme=dark]{--bg:#0e1020;--card:#171a30;--ink:#eceefb;--mut:#9399b9;--line:#2a2e4b;--ac:#8b80ff;--acs:#2a2668}
+*{box-sizing:border-box}html,body{height:auto}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "DM Sans",system-ui,sans-serif}
+h1,h2,.logo{font-family:"Bricolage Grotesque","DM Sans",sans-serif;letter-spacing:-.02em;margin:0}
+button,input,select{font:inherit;color:inherit}
+.top{display:flex;align-items:center;gap:12px;padding:14px max(16px,4vw);position:sticky;top:0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);z-index:5}
+.logo{font-size:22px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer}.logo i{width:28px;height:28px;border-radius:9px 9px 9px 2px;background:var(--ac);display:inline-block}
+.sp{flex:1}.btn{border:0;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer;background:var(--ac);color:#fff}.btn.g{background:var(--acs);color:var(--ac)}.btn:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+main{max-width:1100px;margin:0 auto;padding:8px max(16px,4vw) 60px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.05;margin:18px 0 14px;font-weight:800}
+.magic{display:flex;gap:10px;background:var(--card);border:2px solid var(--ac);border-radius:18px;padding:8px 8px 8px 18px;align-items:center}
+.magic input{flex:1;border:0;background:none;font-size:18px;min-width:0;outline:0}.hint{color:var(--mut);font-size:14px;margin:8px 4px 22px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr) 1.3fr;background:var(--card);border-radius:20px;overflow:hidden}
+.strip>div{padding:18px 20px;border-right:1px solid var(--line)}.strip>div:last-child{border:0}.k{color:var(--mut);font-size:14px}.v{font:800 26px "Bricolage Grotesque";margin-top:2px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:64px}.bars div{flex:1;text-align:center;font-size:11px;color:var(--mut)}.bars b{display:block;background:var(--acs);border-radius:6px 6px 2px 2px;min-height:4px;margin-bottom:3px}.bars .now b{background:var(--ac)}
+.tabs{display:flex;gap:8px;margin:26px 0 12px;flex-wrap:wrap}.tab{border:1px solid var(--line);background:none;border-radius:99px;padding:6px 14px;cursor:pointer}.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.row{display:grid;grid-template-columns:1.6fr 1fr 1fr auto;gap:12px;align-items:center;background:var(--card);border-radius:16px;padding:14px 18px;margin-bottom:8px;cursor:pointer}
+.row:hover{box-shadow:0 0 0 2px var(--acs)}.row small{color:var(--mut);display:block}.amt{font-weight:700;text-align:right}
+.pill{border-radius:99px;padding:3px 11px;font-size:13px;font-weight:700;display:inline-block}.draft{background:var(--line);color:var(--mut)}.sent{background:#fff1dc;color:var(--wait)}.late{background:#ffe3e4;color:var(--bad)}.paid{background:#d9f5ec;color:var(--ok)}
+.ico{border:0;background:var(--acs);color:var(--ac);border-radius:9px;padding:6px 10px;cursor:pointer;font-weight:700}
+.ed{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:28px;align-items:start;margin-top:14px}
+.form{background:var(--card);border-radius:20px;padding:20px;display:grid;gap:12px}
+label{font-size:13px;color:var(--mut);display:grid;gap:3px}input,select{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:9px 11px;width:100%}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ln{display:grid;grid-template-columns:1fr 54px 78px 52px 30px;gap:6px}.ln button{border:0;background:none;color:var(--bad);cursor:pointer;font-size:18px}
+.link{border:0;background:none;color:var(--ac);font-weight:700;cursor:pointer;padding:0;text-align:left}.acts{display:flex;gap:8px;flex-wrap:wrap}
+.sheet{background:#fff;color:#14172b;border-radius:6px;box-shadow:0 20px 50px -20px rgba(20,23,60,.45);padding:44px 40px 36px 52px;position:relative;overflow:hidden;font-size:14px;min-height:560px}
+.sheet:before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;background:linear-gradient(#4b3bff,#8b80ff)}
+.sheet h2{font-size:40px;color:#4b3bff}.sheet table{width:100%;border-collapse:collapse;margin:22px 0}.sheet th{text-align:left;font-weight:500;color:#6b7090;border-bottom:2px solid #14172b;padding:6px 0}.sheet td{padding:8px 0;border-bottom:1px solid #e6e8f3}.r{text-align:right!important}
+.tt{margin-left:auto;width:260px}.tt div{display:flex;justify-content:space-between;padding:3px 0}.big{font:800 30px "Bricolage Grotesque";color:#4b3bff;border-top:2px solid #14172b;margin-top:6px;padding-top:8px!important}
+.stamp{position:absolute;right:40px;top:150px;border:4px solid #0f9d78;color:#0f9d78;font:800 34px "Bricolage Grotesque";padding:2px 14px;border-radius:8px;transform:rotate(-12deg);opacity:.85}
+.mut{color:#6b7090;font-size:12px}.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;z-index:20}
+.cf{position:fixed;top:-10px;width:9px;height:14px;z-index:30;animation:fall 1.6s ease-in forwards;pointer-events:none}@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.2}}
+@media(prefers-reduced-motion:reduce){.cf{display:none}}
+@media(max-width:820px){.strip{grid-template-columns:1fr 1fr}.strip>div{border-bottom:1px solid var(--line)}.ed{grid-template-columns:1fr}.row{grid-template-columns:1fr auto}.row .c3{display:none}.sheet{padding:30px 20px 24px 32px}.stamp{top:110px;right:16px}}
+@media print{body *{visibility:hidden}#sheet,#sheet *{visibility:visible}#sheet{position:absolute;left:0;top:0;width:100%;box-shadow:none}}
+:root{--bg:#fff;--card:#fff;--ink:#0d0d12;--mut:#6e7084;--line:#e7e7ee;--soft:#f5f5f8;--acs:#ebe9ff;--ac:#4b3bff}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0e1a;--card:#14162a;--ink:#f1f2fb;--mut:#9aa0bd;--line:#262a45;--soft:#1a1d34;--acs:#2a2668;--ac:#8b80ff}}
+:root[data-theme=dark]{--bg:#0d0e1a;--card:#14162a;--ink:#f1f2fb;--mut:#9aa0bd;--line:#262a45;--soft:#1a1d34;--acs:#2a2668;--ac:#8b80ff}
+.shell{display:flex;min-height:100vh}.content{flex:1;min-width:0}
+.rail{width:64px;flex:none;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 0;position:sticky;top:0;height:100vh}
+.rail b{width:30px;height:30px;border-radius:50%;background:var(--acs);color:var(--ac);display:grid;place-items:center;font:800 13px "Bricolage Grotesque";margin-bottom:14px}
+.rail button{width:38px;height:38px;border:0;background:none;border-radius:10px;cursor:pointer;display:grid;place-items:center;color:var(--mut)}.rail button:hover,.rail .on{background:var(--soft);color:var(--ink)}
+.rail svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.menu{width:232px;flex:none;border-right:1px solid var(--line);padding:22px 12px;position:sticky;top:0;height:100vh}
+.menu small{display:block;color:var(--mut);font-size:13px;margin:18px 10px 6px}
+.menu button{display:block;width:100%;text-align:left;border:0;background:none;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:15px}.menu button:hover,.menu .on{background:var(--soft)}
+.menu button:focus-visible,.tbs button:focus-visible,.rail button:focus-visible{outline:3px solid var(--ac)}
+.top{display:none}main{max-width:none;margin:0;padding:0 clamp(16px,3vw,36px) 60px}
+.hd{display:flex;align-items:center;gap:12px;padding:26px 0 18px}.hd h1{margin:0;flex:1;font-size:32px}
+.bk{background:var(--ink);color:var(--bg);border:0;border-radius:8px;padding:10px 16px;font-weight:700;cursor:pointer}
+.magic{border:1.5px solid var(--ac);border-radius:10px;background:var(--bg);padding:6px 6px 6px 16px}.magic input{font-size:16px;border:0;background:none}.hint{margin:8px 2px 4px}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0 28px}.kc{border:1px solid var(--line);border-radius:8px;padding:18px 20px;position:relative}.kc .v{font:700 28px "Bricolage Grotesque";margin:4px 0 2px}.kc small{color:var(--mut)}.kc .up{color:var(--ok)}.kc .dn{color:var(--bad)}
+.mb{position:absolute;right:18px;bottom:18px;display:flex;align-items:flex-end;gap:4px;height:40px}.mb i{width:9px;background:var(--acs);border-radius:2px}.mb .now{background:var(--ac)}
+.tbs{display:flex;gap:26px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}.tbs button{border:0;background:none;padding:10px 0;cursor:pointer;color:var(--mut);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}.tbs sup{font-size:11px;margin-left:5px}.tbs .on{color:var(--ink);font-weight:700;border-color:var(--ink)}
+.fl{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}.fl select{width:auto;border:0;background:var(--soft);border-radius:99px;padding:8px 14px}.fl input{max-width:260px;margin-left:auto;border:0;background:var(--soft);border-radius:8px}
+.dt{width:100%;border-collapse:collapse}.dt th{font-weight:500;color:var(--mut);font-size:13px;text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);cursor:pointer;white-space:nowrap}.dt td{padding:14px 8px;border-bottom:1px solid var(--line);font-size:14px}.r2{cursor:pointer}.r2:hover td{background:var(--soft)}.dt small{color:var(--mut);display:block}
+.pj{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:12px}.pj i,.sd i{width:7px;height:7px;border-radius:50%;display:inline-block}.sd{display:inline-flex;align-items:center;gap:6px}
+.pb{display:inline-block;width:36px;height:3px;background:var(--ok);margin-right:14px;vertical-align:middle;border-radius:2px}.ft{color:var(--mut);font-size:13px;padding:14px 0}
+.form{border:1px solid var(--line);border-radius:12px}
+@media(max-width:820px){.rail,.menu{display:none}.top{display:flex}.kp{grid-template-columns:1fr}.hm{display:none}.hd h1{font-size:26px}}
+.cell{border:0;background:transparent;padding:6px 4px;width:100%;border-radius:6px}.cell:hover,.cell:focus{background:var(--soft)}
+.fl.add input{max-width:none;margin:0;flex:1;min-width:130px}.bn{border:1px dashed var(--ac);border-radius:8px;padding:12px 16px;margin:0 0 14px}
+</style></head><body>
+<div class="shell"><aside class="rail"><b>C</b><button class="on" onclick="go('home')" aria-label="Factures"><svg viewBox="0 0 24 24" aria-hidden="true"><path d='M7 3h7l4 4v14H7zM14 3v4h4'/></svg></button><button onclick="go('new')" aria-label="Nouvelle facture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d='M12 5v14M5 12h14'/></svg></button><button onclick="go('home');setTimeout(()=>{const e=document.querySelector('.fl input');e&&e.focus()})" aria-label="Rechercher"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx='11' cy='11' r='6'/><path d='M20 20l-4-4'/></svg></button></aside><nav class="menu" id="menu"></nav><div class="content"><div class="top"><div class="logo" onclick="go('home')"><i></i>Plume</div><div class="sp"></div><select aria-label="Menu" style="width:auto" onchange="const v=this.value;this.selectedIndex=0;if(v)go(v)"><option value="">Menu</option><option value="home">Factures</option><option value="clients">Clients</option><option value="projets">Projets</option><option value="produits">Produits et services</option><option value="params">Paramètres</option></select><button class="btn" onclick="go('new')">Nouvelle facture</button></div><main id="m"></main></div></div>
+<script>
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur=n=>new Intl.NumberFormat("fr-FR",{style:"currency",currency:"EUR"}).format(n||0);
+const D=n=>{const x=new Date();x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)};
+const add=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)};
+const fd=d=>d?new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}):"—";
+const L={draft:"Brouillon",sent:"Envoyée",late:"En retard",paid:"Payée"};
+const KEYS={inv:"factures",clients:"clients",projets:"projets",produits:"produits",s:"parametres",n:"compteur"};
+function load(){const d={inv:[],clients:[],projets:[],produits:[],s:{name:"",siret:"",addr:"",iban:"",fr:true},n:1};for(const k in KEYS){try{const v=JSON.parse(localStorage.getItem("plume."+KEYS[k]));if(v!=null)d[k]=k==="s"?{...d.s,...v}:v}catch(e){}}return d}
+let db=load();
+const save=(...ks)=>{for(const k of ks.length?ks:Object.keys(KEYS))try{localStorage.setItem("plume."+KEYS[k],JSON.stringify(db[k]))}catch(e){}};
+const sub=i=>i.items.reduce((s,l)=>s+l.q*l.p,0),rem=i=>sub(i)*(i.remise||0)/100,
+tva=i=>db.s.fr?0:i.items.reduce((s,l)=>s+l.q*l.p*(1-(i.remise||0)/100)*(l.t||0)/100,0),tot=i=>sub(i)-rem(i)+tva(i);
+const st=i=>i.status==="sent"&&i.due<D(0)?"late":i.status;
+let view="home",cur=null,flt="all";
+function parse(s){s=s.trim();if(!s)return null;const n=v=>parseFloat(String(v).replace(",","."));
+let m=s.match(/^(.*?)\s*(\d+(?:[.,]\d+)?)\s*[x×*]\s*(\d+(?:[.,]\d+)?)\s*€?\s*(?:tva\s*(\d+(?:[.,]\d+)?))?\s*$/i);
+if(m)return{d:m[1].trim()||"Prestation",q:n(m[2]),p:n(m[3]),t:m[4]?n(m[4]):20};
+m=s.match(/^(.*?)\s*(\d+(?:[.,]\d+)?)\s*€?\s*$/);if(m)return{d:m[1].trim()||"Prestation",q:1,p:n(m[2]),t:20};
+return{d:s,q:1,p:0,t:20}}
+function mk(line){return{id:Date.now(),num:"",client:"",email:"",date:D(0),due:D(30),items:line?[line]:[],status:"draft",remise:0}}
+function go(v,i){if(v==="new"){cur=mk();view="edit"}else if(v==="open"){cur=db.inv.find(x=>x.id===i);view="edit"}else view=["clients","projets","produits","params"].includes(v)?v:"home";render();scrollTo(0,0)}
+function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.append(e);setTimeout(()=>e.remove(),2200)}
+function confetti(){const c=["#4b3bff","#0f9d78","#ffb020","#ff6b8a","#8b80ff"];for(let i=0;i<46;i++){const e=document.createElement("i");e.className="cf";e.style.cssText=`left:${Math.random()*100}vw;background:${c[i%5]};animation-delay:${Math.random()*.4}s;border-radius:${i%2?"50%":"2px"}`;document.body.append(e);setTimeout(()=>e.remove(),2200)}}
+let fs="all",fc="all",sq="",sk="due",sd=1;
+const pal=["#ef6b6b","#8b6bef","#2aa7c9","#e8a317","#3fb27f"],SD={draft:["","Brouillon"],sent:["#2f6bff","À payer"],late:["var(--bad)","En retard"],paid:["var(--ok)","Payée"]};
+const sdate=d=>new Date(d).toLocaleDateString("fr-FR",{day:"2-digit",month:"long"}),pl=n=>`${n} facture${n>1?"s":""}`;
+const pj=i=>{const t=i.proj||(i.items[0]?i.items[0].d.split(" ")[0]:"");if(!t)return"—";let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))%5;return`<span class="pj"><i style="background:${pal[h]}"></i>${esc(t)}</span>`};
+const upd=()=>{document.getElementById("tb").innerHTML=tbl()};
+function srt(k){if(sk===k)sd*=-1;else{sk=k;sd=1}upd()}
+function list(){const v={due:i=>i.due,date:i=>i.date,amt:tot}[sk];return db.inv.filter(i=>{const s=st(i);return(flt==="all"||(flt==="open"?s==="sent"||s==="late":s===flt))&&(fs==="all"||s===fs)&&(fc==="all"||i.client===fc)&&(!sq||(i.client+i.num).toLowerCase().includes(sq.toLowerCase()))}).sort((a,b)=>(v(a)>v(b)?1:v(a)<v(b)?-1:0)*sd)}
+function tbl(){const l=list(),ar=k=>sk===k?(sd>0?" ↑":" ↓"):"";
+return`<table class="dt"><thead><tr><th>Client</th><th class="hm">Projet</th><th class="hm" onclick="srt('date')">Date d’émission${ar("date")}</th><th class="hm" onclick="srt('due')">Date d’échéance${ar("due")}</th><th>Statut</th><th class="r" onclick="srt('amt')">Montant${ar("amt")}</th><th></th></tr></thead><tbody>${l.map(i=>{const s=st(i),[c,t]=SD[s];return`<tr class="r2" onclick="go('open',${i.id})"><td><b>${esc(i.client)||"Client à renseigner"}</b><small>${i.num}</small></td><td class="hm">${pj(i)}</td><td class="hm">${sdate(i.date)}</td><td class="hm">${sdate(i.due)}</td><td><span class="sd">${c?`<i style="background:${c}"></i>`:""}${t}</span></td><td class="r">${s==="paid"?'<span class="pb"></span>':""}${eur(tot(i))}</td><td class="r" onclick="event.stopPropagation()">${s!=="paid"?`<button class="ico" onclick="pay(${i.id})">Encaissée</button> `:""}<button class="ico" onclick="dup(${i.id})">Dupliquer</button></td></tr>`}).join("")||`<tr><td colspan="7" style="padding:30px;color:var(--mut)">Aucune facture ne correspond. Tapez une ligne dans la barre ci-dessus pour en créer une.</td></tr>`}</tbody></table><div class="ft">${l.length?"1-"+l.length:"0"} sur ${l.length}</div>`}
+function sync(i=cur){if(!i.num)i.num=`FAC-${new Date().getFullYear()}-${String(db.n++).padStart(3,"0")}`;
+const nm=(k,v,x)=>{if(v&&!db[k].some(r=>r.name===v))db[k].push({id:Date.now()+Math.floor(Math.random()*1e3),name:v,...x})};
+nm("clients",i.client,{email:i.email||"",addr:"",siret:""});nm("projets",i.proj,{});save()}
+function keep(){sync();if(!db.inv.includes(cur))db.inv.unshift(cur);save();paper()}
+function fillC(){const c=db.clients.find(x=>x.name===cur.client);if(c&&c.email){cur.email=c.email;const e=document.querySelector("input[type=email]");if(e)e.value=c.email}}
+function addProd(id){const p=db.produits.find(x=>x.id==id);if(!p)return;cur.items.push({d:p.name,q:1,p:p.price,t:p.tva});lines();paper()}
+const banner=()=>db.s.name?"":`<div class="bn">Première visite ? Renseignez vos informations d’émetteur dans <button class="link" onclick="go('params')">Paramètres</button> pour qu’elles apparaissent sur vos factures.</div>`;
+const CFG={clients:{t:"Clients",f:[["name","Nom ou société"],["email","E-mail"],["addr","Adresse"],["siret","SIRET"]]},projets:{t:"Projets",f:[["name","Nom du projet"]]},produits:{t:"Produits et services",f:[["name","Désignation"],["price","Prix unitaire (€)","number"],["tva","TVA (%)","number"]]}};
+function crud(k){const c=CFG[k];
+return`<div class="hd"><h1>${c.t}</h1></div><div class="fl add">${c.f.map(([f,t,y])=>`<input id="n_${f}" type="${y||"text"}" placeholder="${t}" aria-label="${t}" onkeydown="if(event.key==='Enter')addRec('${k}')">`).join("")}<button class="bk" onclick="addRec('${k}')">Ajouter</button></div>
+<table class="dt"><thead><tr>${c.f.map(f=>`<th>${f[1]}</th>`).join("")}${k==="clients"?'<th class="r">Facturé</th>':""}<th></th></tr></thead><tbody>${db[k].map(x=>`<tr>${c.f.map(([f,t,y])=>`<td><input class="cell" type="${y||"text"}" value="${esc(x[f])}" aria-label="${t}" oninput="upRec('${k}',${x.id},'${f}',this.value,'${y||""}')"></td>`).join("")}${k==="clients"?`<td class="r">${eur(db.inv.filter(i=>i.client===x.name).reduce((s,i)=>s+tot(i),0))}</td>`:""}<td class="r"><button class="ico" onclick="delRec('${k}',${x.id})">Supprimer</button></td></tr>`).join("")||`<tr><td colspan="9" style="padding:30px;color:var(--mut)">Rien ici pour l’instant. Remplissez la ligne ci-dessus, puis Entrée.</td></tr>`}</tbody></table>
+<p class="hint">Les nouveaux clients et projets saisis dans une facture sont ajoutés ici automatiquement. Les factures gardent une copie du nom du client au moment de l’émission.</p>`}
+function addRec(k){const r={id:Date.now()};for(const [f,,y] of CFG[k].f){const v=document.getElementById("n_"+f).value.trim(),n=parseFloat(v.replace(",","."));r[f]=y==="number"?(isNaN(n)?(f==="tva"?20:0):n):v}
+if(!r.name)return toast("Renseignez au moins le nom");db[k].push(r);save(k);render()}
+function upRec(k,id,f,v,y){const r=db[k].find(x=>x.id===id);r[f]=y==="number"?(parseFloat(v)||0):v;save(k)}
+function delRec(k,id){db[k]=db[k].filter(x=>x.id!==id);save(k);render()}
+function params(){const s=db.s,f=(k,t)=>`<label>${t}<input value="${esc(s[k])}" oninput="db.s.${k}=this.value;save('s')"></label>`;
+return`<div class="hd"><h1>Paramètres</h1></div><div class="form" style="max-width:560px">${f("name","Nom ou société")}${f("siret","SIRET")}${f("addr","Adresse")}${f("iban","IBAN")}
+<label>Régime<select onchange="db.s.fr=this.value==='1';save('s')"><option value="1" ${s.fr?"selected":""}>Sans TVA (micro-entrepreneur)</option><option value="0" ${s.fr?"":"selected"}>Avec TVA</option></select></label>
+<label>Prochain numéro de facture<input type="number" min="1" value="${db.n}" oninput="db.n=Math.max(1,+this.value||1);save('n')"></label>
+<h2 style="font-size:18px">Sauvegarde</h2><p class="hint" style="margin:0">Vos données sont stockées dans ce navigateur, une base par catégorie. Exportez-les régulièrement en JSON.</p>
+<div class="acts"><button class="bk" onclick="exportDB()">Exporter</button><button class="btn g" onclick="this.nextElementSibling.click()">Importer</button><input type="file" accept=".json" hidden onchange="importDB(this.files[0])"><button class="btn g" style="color:var(--bad)" onclick="resetDB()">Tout effacer</button></div></div>`}
+function exportDB(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}));a.download=`plume-sauvegarde-${D(0)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1e3)}
+function importDB(f){if(!f)return;f.text().then(t=>{try{const d=JSON.parse(t);if(!Array.isArray(d.inv))throw 0;for(const k in KEYS)if(d[k]!=null)db[k]=d[k];save();toast("Données importées");render()}catch(e){toast("Fichier invalide")}})}
+function resetDB(){if(confirm("Effacer toutes les données de ce navigateur ?")){for(const k in KEYS)try{localStorage.removeItem("plume."+KEYS[k])}catch(e){}db=load();render()}}
+function menu(){const a=(k,t)=>`<button class="${view==="home"&&fs===k&&flt==="all"?"on":""}" onclick="fs='${k}';flt='all';go('home')">${t}</button>`,b=(k,t)=>`<button class="${view===k?"on":""}" onclick="go('${k}')">${t}</button>`;
+return`<div class="logo" onclick="go('home')" style="margin:0 8px 18px"><i></i>Plume</div><small>Factures</small>${a("all","Factures clients")}${a("draft","Brouillons")}${a("late","En retard")}${a("paid","Payées")}<small>Données</small>${b("clients","Clients")}${b("projets","Projets")}${b("produits","Produits et services")}<small>Compte</small>${b("params","Paramètres")}`}
+function render(){document.getElementById("menu").innerHTML=menu();const m=document.getElementById("m");m.innerHTML=view==="home"?home():view==="edit"?editor():view==="params"?params():crud(view);if(view==="edit"){lines();paper()}}
+function home(){const now=new Date(),mk2=n=>new Date(now.getFullYear(),now.getMonth()+n,15).toISOString().slice(0,7),sum=a=>a.reduce((s,i)=>s+tot(i),0),paid=db.inv.filter(i=>i.status==="paid"),mo=k=>sum(paid.filter(i=>(i.paidOn||"").startsWith(k))),cn=k=>db.inv.filter(i=>st(i)===k);
+const a=mo(mk2(0)),b=mo(mk2(-1)),dl=b?Math.round((a-b)/b*100):null,bs=[-5,-4,-3,-2,-1,0].map(n=>mo(mk2(n))),mx=Math.max(1,...bs);
+return`<div class="hd"><h1>Factures clients</h1><button class="bk" onclick="go('new')">Créer une facture</button></div>
+${banner()}<div class="magic"><input id="mg" placeholder="Saisie magique : « Logo 2 x 450 » puis Entrée" aria-label="Saisie magique" onkeydown="if(event.key==='Enter'&&this.value.trim()){cur=mk(parse(this.value));view='edit';render()}"><button class="btn" onclick="cur=mk(parse(mg.value));view='edit';render()">Créer</button></div>
+<p class="hint">Description, quantité × prix : la ligne est prête. Ajoutez « tva 10 » si besoin. Raccourcis : N et /.</p>
+<div class="kp"><div class="kc"><div class="k">À encaisser</div><div class="v">${eur(sum(cn("sent")))}</div><small>${pl(cn("sent").length)}</small></div>
+<div class="kc"><div class="k">En retard</div><div class="v" style="color:var(--bad)">${eur(sum(cn("late")))}</div><small>${pl(cn("late").length)}</small></div>
+<div class="kc"><div class="k">Encaissé ce mois-ci</div><div class="v">${eur(a)}</div><small class="${dl!==null&&dl<0?"dn":"up"}">${dl===null?"Premier encaissement à venir":(dl>=0?"↑ ":"↓ ")+Math.abs(dl)+" % vs mois précédent"}</small><div class="mb" aria-hidden="true">${bs.map((v,k)=>`<i class="${k===5?"now":""}" style="height:${Math.max(4,Math.round(v/mx*40))}px"></i>`).join("")}</div></div></div>
+<div class="tbs">${[["all","Toutes les factures",db.inv.length],["draft","Brouillons",cn("draft").length],["open","À payer",cn("sent").length+cn("late").length],["paid","Payées",cn("paid").length]].map(([k,t,n])=>`<button class="${flt===k?"on":""}" onclick="flt='${k}';fs='all';render()">${t}<sup>${n}</sup></button>`).join("")}</div>
+<div class="fl"><select aria-label="Client" onchange="fc=this.value;upd()"><option value="all">Client</option>${[...new Set(db.inv.map(i=>i.client).filter(Boolean))].map(c=>`<option ${fc===c?"selected":""}>${esc(c)}</option>`).join("")}</select>
+<select aria-label="Statut" onchange="fs=this.value;upd()"><option value="all">Statut</option>${Object.keys(L).map(k=>`<option value="${k}" ${fs===k?"selected":""}>${L[k]}</option>`).join("")}</select>
+<input type="search" placeholder="Rechercher des factures" aria-label="Rechercher" value="${esc(sq)}" oninput="sq=this.value;upd()"></div>
+<div id="tb">${tbl()}</div>`}
+function pay(id){const i=db.inv.find(x=>x.id===id);i.status="paid";i.paidOn=D(0);save();confetti();toast("Facture encaissée");render()}
+function dup(id){const i=db.inv.find(x=>x.id===id),c=JSON.parse(JSON.stringify(i));Object.assign(c,mk(),{client:i.client,email:i.email,items:c.items,remise:i.remise});delete c.paidOn;sync(c);db.inv.unshift(c);save();toast("Facture dupliquée");render()}
+function editor(){const i=cur,n=Math.round((new Date(i.due)-new Date(i.date))/864e5);
+return`<div class="ed"><div class="form"><button class="link" onclick="back()">← Tableau de bord</button><h2>${i.num||"Nouvelle facture"}</h2>
+<label>Client<input value="${esc(i.client)}" list="dl_c" oninput="cur.client=this.value;fillC();paper()" placeholder="Nom ou société"></label>
+<label>Projet<input value="${esc(i.proj||"")}" list="dl_p" oninput="cur.proj=this.value" placeholder="Ex. Refonte du site"></label>
+<label>E-mail du client<input type="email" value="${esc(i.email)}" oninput="cur.email=this.value"></label>
+<div class="g2"><label>Date<input type="date" value="${i.date}" onchange="cur.date=this.value;cur.due=add(this.value,+dd.value);paper()"></label>
+<label>Paiement<select id="dd" onchange="cur.due=add(cur.date,+this.value);paper()">${[[0,"À réception"],[15,"15 jours"],[30,"30 jours"],[45,"45 jours"],[60,"60 jours"]].map(([v,t])=>`<option value="${v}" ${v===n?"selected":""}>${t}</option>`).join("")}</select></label></div>
+<label>Ajout rapide<input placeholder="Atelier 3 x 120 puis Entrée" onkeydown="if(event.key==='Enter'&&this.value.trim()){cur.items.push(parse(this.value));this.value='';lines();paper()}"></label>
+${db.produits.length?`<label>Depuis le catalogue<select onchange="addProd(this.value);this.selectedIndex=0"><option value="">Choisir un produit ou service…</option>${db.produits.map(p=>`<option value="${p.id}">${esc(p.name)} · ${eur(p.price)}</option>`).join("")}</select></label>`:""}<div id="ln" style="display:grid;gap:6px"></div>
+<div class="g2"><label>Remise (%)<input type="number" min="0" max="100" value="${i.remise||0}" oninput="cur.remise=+this.value||0;paper()"></label>
+<label>Régime<select onchange="db.s.fr=this.value==='1';lines();paper();save()"><option value="1" ${db.s.fr?"selected":""}>Sans TVA (micro-entrepreneur)</option><option value="0" ${db.s.fr?"":"selected"}>Avec TVA</option></select></label></div>
+<label>IBAN affiché sur la facture<input value="${esc(db.s.iban)}" oninput="db.s.iban=this.value;paper()"></label>
+<div class="acts"><button class="btn" onclick="fin('draft')">Enregistrer</button><button class="btn g" onclick="fin('sent')">Marquer envoyée</button><button class="btn g" onclick="fin('paid')">Marquer payée</button></div></div>
+<div><div class="acts" style="margin-bottom:12px"><button class="btn g" onclick="keep();print()">Imprimer / PDF</button><button class="btn g" onclick="mail()">Copier l’e-mail d’envoi</button></div><div class="sheet" id="sheet"></div></div></div><datalist id="dl_c">${db.clients.map(c=>`<option value="${esc(c.name)}">`).join("")}</datalist><datalist id="dl_p">${db.projets.map(p=>`<option value="${esc(p.name)}">`).join("")}</datalist>`}
+function lines(){const e=document.getElementById("ln");if(!e)return;e.innerHTML=cur.items.map((l,k)=>`<div class="ln"><input value="${esc(l.d)}" oninput="cur.items[${k}].d=this.value;paper()" aria-label="Description"><input type="number" value="${l.q}" min="0" step="any" oninput="cur.items[${k}].q=+this.value||0;paper()" aria-label="Quantité"><input type="number" value="${l.p}" min="0" step="any" oninput="cur.items[${k}].p=+this.value||0;paper()" aria-label="Prix unitaire">${db.s.fr?"<span></span>":`<input type="number" value="${l.t}" oninput="cur.items[${k}].t=+this.value||0;paper()" aria-label="TVA">`}<button onclick="cur.items.splice(${k},1);lines();paper()" aria-label="Supprimer">×</button></div>`).join("")||`<p class="hint" style="margin:0">Aucune ligne. Utilisez l’ajout rapide ci-dessus.</p>`}
+function paper(){const i=cur,s=db.s;document.getElementById("sheet").innerHTML=`${i.status==="paid"?'<div class="stamp">PAYÉE</div>':""}
+<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><h2>Facture</h2><div class="mut">${i.num||"N° attribué à l’enregistrement"}</div></div><div class="r"><b>${esc(s.name)||"Votre nom ou société"}</b><div class="mut">${esc(s.addr||"")}</div><div class="mut">${s.siret?"SIRET "+esc(s.siret):""}</div></div></div>
+<div style="display:flex;justify-content:space-between;margin-top:26px;gap:16px;flex-wrap:wrap"><div><div class="mut">Facturé à</div><b>${esc(i.client)||"—"}</b><div class="mut">${esc((db.clients.find(c=>c.name===i.client)||{}).addr||"")}</div></div><div class="r"><div class="mut">Émise le ${fd(i.date)}</div><div><b>À régler avant le ${fd(i.due)}</b></div></div></div>
+<table><tr><th>Description</th><th class="r">Qté</th><th class="r">Prix</th><th class="r">Total</th></tr>${i.items.map(l=>`<tr><td>${esc(l.d)}</td><td class="r">${l.q}</td><td class="r">${eur(l.p)}</td><td class="r">${eur(l.q*l.p)}</td></tr>`).join("")||'<tr><td colspan="4" class="mut">Ajoutez une ligne pour voir la facture se construire.</td></tr>'}</table>
+<div class="tt"><div><span>Sous-total</span><span>${eur(sub(i))}</span></div>${i.remise?`<div><span>Remise ${i.remise} %</span><span>−${eur(rem(i))}</span></div>`:""}${s.fr?"":`<div><span>TVA</span><span>${eur(tva(i))}</span></div>`}<div class="big"><span>À payer</span><span>${eur(tot(i))}</span></div></div>
+<p class="mut" style="margin-top:36px">${s.fr?"TVA non applicable, art. 293 B du CGI. ":""}${s.iban?"Virement : "+esc(s.iban)+"<br>":""}Pénalité de retard : 3 fois le taux d’intérêt légal. Indemnité de recouvrement : 40 €.</p>`}
+function fin(x){cur.status=x;sync();if(x==="paid"){cur.paidOn=D(0);confetti()}if(!db.inv.includes(cur))db.inv.unshift(cur);save();toast(x==="paid"?"Facture encaissée":x==="sent"?"Facture marquée envoyée":"Facture enregistrée");view="home";render()}
+function back(){if(cur.items.length&&!db.inv.includes(cur)){sync();db.inv.unshift(cur);save()}go("home")}
+function mail(){keep();const i=cur,t=`Bonjour ${i.client||""},\n\nVeuillez trouver ci-joint ma facture ${i.num} d’un montant de ${eur(tot(i))}, à régler avant le ${fd(i.due)}.\n\nMerci pour votre confiance,\n${db.s.name.split("·")[0].trim()}`;
+try{navigator.clipboard.writeText(t).then(()=>toast("E-mail copié"),()=>toast("Copie impossible ici"))}catch(e){toast("Copie impossible ici")}}
+addEventListener("keydown",e=>{if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||e.metaKey||e.ctrlKey)return;if(e.key==="n")go("new");if(e.key==="/"&&view==="home"){e.preventDefault();document.getElementById("mg").focus()}});
+render();
+</script></body></html>
